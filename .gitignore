@@ -24,3 +24,5 @@ bitcoin_core_client-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+.iex.local.exs
