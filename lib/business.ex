@@ -1,13 +1,13 @@
 defmodule BitcoinCoreClient.Business do
-  alias BitcoinCoreClient.Http
+  alias BitcoinCoreClient.Rpc
   alias BitcoinLib.Block
 
   def get_block_hash(height, settings) do
-    Http.get(settings, "getblockhash", [height])
+    Rpc.call(settings, "getblockhash", [height])
   end
 
   def get_block_by_hash(block_hash, settings) do
-    Http.get(settings, "getblock", [block_hash, 0])
+    Rpc.call(settings, "getblock", [block_hash, 0])
     |> Binary.from_hex()
     |> Block.decode()
   end
