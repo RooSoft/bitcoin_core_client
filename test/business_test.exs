@@ -28,13 +28,9 @@ defmodule BitcoinCoreClient.BusinessTest do
   end
 
   test "use block height to get the block's hash", %{settings: settings, url: url} do
-    body = Rpc.Body.create("getblockhash", [0])
-
-    expect(HttpMock, :post!, fn ^url, ^body, [] ->
-      "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"
-    end)
-
     height = 0
+
+    expect_get_block_hash(url, height)
 
     hash = Business.get_block_hash(height, settings)
 
@@ -44,13 +40,37 @@ defmodule BitcoinCoreClient.BusinessTest do
   test "get block by hash", %{settings: settings, url: url} do
     block_hash = "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"
 
-    body = Rpc.Body.create("getblock", [block_hash, 0])
-
-    expect(HttpMock, :post!, fn ^url, ^body, [] -> encoded_genesis_block() end)
+    expect_get_block(url, block_hash)
 
     block = Business.get_block_by_hash(block_hash, settings)
 
     assert block == encoded_genesis_block() |> Binary.from_hex() |> Block.decode()
+  end
+
+  test "get block by height", %{settings: settings, url: url} do
+    height = 0
+    block_hash = "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"
+
+    expect_get_block_hash(url, height)
+    expect_get_block(url, block_hash)
+
+    block = Business.get_block_by_height(height, settings)
+
+    assert block == encoded_genesis_block() |> Binary.from_hex() |> Block.decode()
+  end
+
+  defp expect_get_block_hash(url, height) do
+    body = Rpc.Body.create("getblockhash", [height])
+
+    expect(HttpMock, :post!, fn ^url, ^body, [] ->
+      "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"
+    end)
+  end
+
+  defp expect_get_block(url, block_hash) do
+    body = Rpc.Body.create("getblock", [block_hash, 0])
+
+    expect(HttpMock, :post!, fn ^url, ^body, [] -> encoded_genesis_block() end)
   end
 
   defp encoded_genesis_block() do
