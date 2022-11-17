@@ -22,6 +22,7 @@ defmodule BitcoinCoreClient.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:hammox, "~> 0.7", only: :test},
       {:bitcoinlib, "~> 0.4.0"},
       {:httpoison, "~> 1.8"},
       {:jason, "~> 1.4"}

@@ -4,7 +4,7 @@ defmodule BitcoinCoreClient.Rpc do
   the HTTP communication details
   """
 
-  alias BitcoinCoreClient.Rpc.Settings
+  alias BitcoinCoreClient.Rpc.{Body, Settings}
 
   @doc """
   Takes
@@ -18,23 +18,9 @@ defmodule BitcoinCoreClient.Rpc do
   """
   @spec call(%Settings{}, binary(), list()) :: binary() | number()
   def call(settings, method, parameters) do
-    HTTPoison.post!(url(settings), post_body(method, parameters), [])
-    |> Map.get(:body)
-    |> Jason.decode!()
-    |> Map.get("result")
-  end
+    url = Settings.to_url(settings)
+    post_body = Body.create(method, parameters)
 
-  defp url(settings) do
-    "http://#{settings.username}:#{settings.password}@#{settings.ip}:#{settings.port}"
-  end
-
-  defp post_body(method, params) do
-    %{
-      jsonrpc: "1.0",
-      id: "curltest",
-      method: method,
-      params: params
-    }
-    |> Jason.encode!()
+    settings.http_module.post!(url, post_body, [])
   end
 end

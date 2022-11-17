@@ -5,16 +5,18 @@ defmodule BitcoinCoreClient do
 
   use GenServer
 
-  alias BitcoinCoreClient.Http
+  @callback get_block_hash(integer()) :: binary()
+
+  alias BitcoinCoreClient.Rpc
   alias BitcoinCoreClient.Business
 
-  def start_link(%Http.Settings{} = settings) do
+  def start_link(%Rpc.Settings{} = settings) do
     GenServer.start_link(__MODULE__, settings, name: __MODULE__)
   end
 
   @impl true
   def init(settings) do
-    HTTPoison.start()
+    settings.http_module.start()
 
     {:ok, settings}
   end
