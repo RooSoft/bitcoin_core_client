@@ -14,8 +14,8 @@ defmodule BitcoinCoreClient.BusinessTest do
     expect(HttpMock, :start, fn -> :ok end)
 
     settings = %Rpc.Settings{
-      username: "electrum",
-      password: "Rh_KUrE42MtGtUqhtjc",
+      username: "my_user",
+      password: "my_password",
       ip: "electrum",
       port: 8332,
       http_module: HttpMock
