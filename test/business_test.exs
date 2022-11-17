@@ -59,7 +59,7 @@ defmodule BitcoinCoreClient.BusinessTest do
     assert block == encoded_genesis_block() |> Binary.from_hex() |> Block.decode()
   end
 
-  defp expect_get_block_hash(url, height) do
+  defp expect_get_block_hash(url, 0 = height) do
     body = Rpc.Body.create("getblockhash", [height])
 
     expect(HttpMock, :post!, fn ^url, ^body, [] ->
@@ -67,7 +67,7 @@ defmodule BitcoinCoreClient.BusinessTest do
     end)
   end
 
-  defp expect_get_block(url, block_hash) do
+  defp expect_get_block(url, "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f" = block_hash) do
     body = Rpc.Body.create("getblock", [block_hash, 0])
 
     expect(HttpMock, :post!, fn ^url, ^body, [] -> encoded_genesis_block() end)
