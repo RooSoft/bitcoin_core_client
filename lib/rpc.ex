@@ -4,7 +4,7 @@ defmodule BitcoinCoreClient.Rpc do
   the HTTP communication details
   """
 
-  alias BitcoinCoreClient.Http.Settings
+  alias BitcoinCoreClient.Rpc.Settings
 
   @doc """
   Takes
