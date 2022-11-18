@@ -8,8 +8,12 @@ defmodule BitcoinCoreClient.Rpc.Http do
 
   @doc """
   Starts the HTTP client
+
+  ## Examples
+      iex> BitcoinCoreClient.Rpc.Http.start()
+      {:ok, []}
   """
-  @spec start() :: :ok
+  @spec start() :: {:ok, [atom()]} | {:error, map()}
   def start() do
     HTTPoison.start()
   end
