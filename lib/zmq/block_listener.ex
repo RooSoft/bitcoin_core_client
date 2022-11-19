@@ -11,7 +11,6 @@ defmodule BitcoinCoreClient.Zmq.BlockListener do
   alias BitcoinCoreClient.Zmq
 
   def start_link(%Zmq.Settings{} = settings) do
-    IO.inspect(self(), label: "start_link")
     GenServer.start_link(__MODULE__, settings, name: __MODULE__)
   end
 
