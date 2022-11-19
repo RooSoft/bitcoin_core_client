@@ -26,7 +26,8 @@ defmodule BitcoinCoreClient.MixProject do
       {:dialyxir, "~> 1.2", only: [:dev], runtime: false},
       {:bitcoinlib, "~> 0.4.0"},
       {:httpoison, "~> 1.8"},
-      {:jason, "~> 1.4"}
+      {:jason, "~> 1.4"},
+      {:chumak, "~> 1.4"}
     ]
   end
 end
