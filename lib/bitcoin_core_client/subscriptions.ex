@@ -40,4 +40,12 @@ defmodule BitcoinCoreClient.Subscriptions do
   def subscribe_blocks() do
     GenServer.cast(@server, {:subscribe_blocks, self()})
   end
+
+  @doc """
+  Unsubscribes the current process to receive bitcoin block messages
+  """
+  @spec unsubscribe_blocks() :: :ok
+  def unsubscribe_blocks() do
+    GenServer.cast(@server, {:unsubscribe_blocks, self()})
+  end
 end

@@ -1,5 +1,5 @@
 defmodule BitcoinCoreClient.SubscriptionsTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias BitcoinCoreClient.Subscriptions
 
@@ -16,6 +16,24 @@ defmodule BitcoinCoreClient.SubscriptionsTest do
     block_subscriptions = Subscriptions.get_blocks_subscriptions()
 
     assert [^self_pid] = block_subscriptions
+  end
+
+  test "remove a subscription for new blocks" do
+    self_pid = self()
+
+    initial_block_subscriptions = Subscriptions.get_blocks_subscriptions()
+
+    Subscriptions.subscribe_blocks()
+
+    subscribed_block_subscriptions = Subscriptions.get_blocks_subscriptions()
+
+    Subscriptions.unsubscribe_blocks()
+
+    unsubscribed_block_subscriptions = Subscriptions.get_blocks_subscriptions()
+
+    assert [] = initial_block_subscriptions
+    assert [^self_pid] = subscribed_block_subscriptions
+    assert [] = unsubscribed_block_subscriptions
   end
 
   test "remove when subscribed process exits" do
