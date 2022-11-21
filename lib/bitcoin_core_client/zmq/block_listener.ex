@@ -22,7 +22,7 @@ defmodule BitcoinCoreClient.Zmq.BlockListener do
         {:error, {:already_started, socket}} -> socket
       end
 
-    :chumak.subscribe(socket, 'rawblock')
+    :chumak.subscribe(socket, "rawblock")
     :chumak.connect(socket, :tcp, to_charlist(ip), port)
 
     state =
