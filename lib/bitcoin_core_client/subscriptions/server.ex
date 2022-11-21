@@ -1,6 +1,8 @@
 defmodule BitcoinCoreClient.Subscriptions.Server do
   use GenServer
 
+  require Logger
+
   alias BitcoinCoreClient.Subscriptions
 
   @impl true
@@ -17,12 +19,41 @@ defmodule BitcoinCoreClient.Subscriptions.Server do
 
   @impl true
   def handle_cast({:subscribe_blocks, pid}, subscriptions) do
+    subscriptions =
+      subscriptions
+      |> add_block_subscription(pid)
+
+    monitor(pid)
+
+    {:noreply, subscriptions}
+  end
+
+  @impl true
+  def handle_info({:DOWN, _reference, :process, pid, :normal}, subscriptions) do
+    subscriptions =
+      subscriptions
+      |> remove_block_subscription(pid)
+
+    {:noreply, subscriptions}
+  end
+
+  defp add_block_subscription(subscriptions, pid) do
     %Subscriptions{blocks: block_subscriptions} = subscriptions
 
     block_subscriptions = [pid | block_subscriptions]
 
-    subscriptions = %{subscriptions | blocks: block_subscriptions}
+    %{subscriptions | blocks: block_subscriptions}
+  end
 
-    {:noreply, subscriptions}
+  defp remove_block_subscription(subscriptions, pid) do
+    %Subscriptions{blocks: block_subscriptions} = subscriptions
+
+    block_subscriptions = Enum.reject(block_subscriptions, &(&1 == pid))
+
+    %{subscriptions | blocks: block_subscriptions}
+  end
+
+  defp monitor(pid) do
+    Process.monitor(pid)
   end
 end
