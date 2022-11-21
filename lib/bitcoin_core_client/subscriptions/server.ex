@@ -20,7 +20,7 @@ defmodule BitcoinCoreClient.Subscriptions.Server do
   def handle_call({:get_block_subscriptions}, _from, subscriptions) do
     %Subscriptions{blocks: blocks} = subscriptions
 
-    {:reply, blocks |> Enum.map(&elem(&1, 0)), subscriptions}
+    {:reply, get_pids(blocks), subscriptions}
   end
 
   @impl true
@@ -67,7 +67,7 @@ defmodule BitcoinCoreClient.Subscriptions.Server do
   defp remove_block_subscription(subscriptions, pid) do
     %Subscriptions{blocks: block_subscriptions} = subscriptions
 
-    block_subscriptions = Enum.reject(block_subscriptions, &(elem(&1, 0) == pid))
+    block_subscriptions = Enum.reject(block_subscriptions, &is_pid(&1, pid))
 
     %{subscriptions | blocks: block_subscriptions}
   end
@@ -82,7 +82,24 @@ defmodule BitcoinCoreClient.Subscriptions.Server do
 
   defp ref_from_pid(subscriptions, pid) do
     subscriptions
-    |> Enum.find(&(elem(&1, 0) == pid))
-    |> elem(1)
+    |> Enum.find(&is_pid(&1, pid))
+    |> get_ref
+  end
+
+  defp get_pids(blocks) do
+    blocks
+    |> Enum.map(&get_pid(&1))
+  end
+
+  defp is_pid(tuple, pid) do
+    elem(tuple, 0) == pid
+  end
+
+  defp get_pid(tuple) do
+    elem(tuple, 0)
+  end
+
+  defp get_ref(tuple) do
+    elem(tuple, 1)
   end
 end
