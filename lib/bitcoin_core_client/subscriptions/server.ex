@@ -14,4 +14,15 @@ defmodule BitcoinCoreClient.Subscriptions.Server do
 
     {:reply, blocks, subscriptions}
   end
+
+  @impl true
+  def handle_cast({:subscribe_blocks, pid}, subscriptions) do
+    %Subscriptions{blocks: block_subscriptions} = subscriptions
+
+    block_subscriptions = [pid | block_subscriptions]
+
+    subscriptions = %{subscriptions | blocks: block_subscriptions}
+
+    {:noreply, subscriptions}
+  end
 end
