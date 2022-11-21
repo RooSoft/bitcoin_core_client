@@ -2,7 +2,7 @@ defmodule BitcoinCoreClient.Server do
   @moduledoc """
   Keeps track of blocks and transactions ZMQ subscriptions
 
-  This is the server part of the GenServer
+  This is the server part of the BitcoinCoreClient GenServer
   """
 
   use GenServer

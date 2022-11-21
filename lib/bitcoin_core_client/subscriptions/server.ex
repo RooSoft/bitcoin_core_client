@@ -1,4 +1,10 @@
 defmodule BitcoinCoreClient.Subscriptions.Server do
+  @moduledoc """
+  Keeps track of blocks and transactions ZMQ subscriptions
+
+  This is the server part of the BitcoinCoreClient.Subscriptions GenServer
+  """
+
   use GenServer
 
   require Logger
