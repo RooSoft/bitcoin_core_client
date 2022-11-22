@@ -48,7 +48,7 @@ defmodule BitcoinCoreClient.Subscriptions.Server do
   end
 
   @impl true
-  def handle_info({:DOWN, _reference, :process, pid, :normal}, subscriptions) do
+  def handle_info({:DOWN, _reference, :process, pid, _}, subscriptions) do
     subscriptions =
       subscriptions
       |> remove_block_subscription(pid)
