@@ -1,14 +1,24 @@
 defmodule BitcoinCoreClient.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       app: :bitcoin_core_client,
-      version: "0.1.0",
+      version: @version,
+      description: "Allows access to Bitcoin Core nodes in native Elixir format",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       application: [applications: [:httpoison]],
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "BitcoinCoreClient",
+      source_url: "https://github.com/RooSoft/bitcoin_core_client",
+      homepage_url: "https://github.com/RooSoft/bitcoin_core_client",
+      docs: docs(),
+      package: package()
     ]
   end
 
@@ -16,6 +26,31 @@ defmodule BitcoinCoreClient.MixProject do
   def application do
     [
       extra_applications: [:logger]
+    ]
+  end
+
+  defp docs do
+    [
+      # The main page in the docs
+      main: "BitcoinCoreClient",
+      extras: docs_extras(),
+      assets: "/guides/assets",
+      source_ref: @version,
+      source_url: "https://github.com/RooSoft/bitcoin_core_client"
+    ]
+  end
+
+  def docs_extras do
+    [
+      "README.md"
+    ]
+  end
+
+  def package do
+    [
+      maintainers: ["Marc Lacoursière"],
+      licenses: ["UNLICENCE"],
+      links: %{"GitHub" => "https://github.com/RooSoft/bitcoin_core_client"}
     ]
   end
 
