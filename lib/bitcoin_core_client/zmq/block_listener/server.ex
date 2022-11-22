@@ -4,6 +4,7 @@ defmodule BitcoinCoreClient.Zmq.BlockListener.Server do
   require Logger
 
   alias BitcoinCoreClient.Zmq
+  alias BitcoinCoreClient.Subscriptions
 
   @impl true
   def init(%Zmq.Settings{ip: ip, port: port} = state) do
@@ -32,12 +33,9 @@ defmodule BitcoinCoreClient.Zmq.BlockListener.Server do
 
   @impl true
   def handle_info({:start, %{socket: socket}}, state) do
-    Logger.info("RECV started...")
-
     {:ok, block} = :chumak.recv(socket)
 
-    Logger.info("received a block")
-    IO.inspect(block)
+    send_block_to_subscribers(block)
 
     send(self(), {:start, state})
 
@@ -58,5 +56,10 @@ defmodule BitcoinCoreClient.Zmq.BlockListener.Server do
     IO.puts("|#{inspect(data)}|")
 
     {:noreply, state}
+  end
+
+  defp send_block_to_subscribers(block) do
+    Subscriptions.get_blocks_subscriptions()
+    |> Enum.each(&send(&1, block))
   end
 end
