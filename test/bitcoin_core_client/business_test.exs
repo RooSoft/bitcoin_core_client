@@ -5,7 +5,6 @@ defmodule BitcoinCoreClient.BusinessTest do
 
   alias BitcoinCoreClient.Rpc
   alias BitcoinCoreClient.Business
-  alias BitcoinLib.Block
 
   setup_all do
     defmock(HttpMock, for: BitcoinCoreClient.Rpc.Http)
@@ -42,7 +41,7 @@ defmodule BitcoinCoreClient.BusinessTest do
 
     block = Business.get_block_by_hash(block_hash, settings)
 
-    assert block == encoded_genesis_block() |> Binary.from_hex() |> Block.decode()
+    assert block == encoded_genesis_block() |> Binary.from_hex()
   end
 
   test "get block by height", %{settings: settings, url: url} do
@@ -54,7 +53,7 @@ defmodule BitcoinCoreClient.BusinessTest do
 
     block = Business.get_block_by_height(height, settings)
 
-    assert block == encoded_genesis_block() |> Binary.from_hex() |> Block.decode()
+    assert block == encoded_genesis_block() |> Binary.from_hex()
   end
 
   defp expect_get_block_hash(url, 0 = height) do

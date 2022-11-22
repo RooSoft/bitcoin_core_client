@@ -1,10 +1,9 @@
 defmodule BitcoinCoreClient.Business do
   @moduledoc """
-  Makes the RPC calls and returns the results in the form of BitcoinLib structures
+  Makes the RPC calls and returns the results in bitstring format
   """
 
   alias BitcoinCoreClient.Rpc
-  alias BitcoinLib.Block
 
   @doc """
   Converts a block height into a block hash
@@ -26,11 +25,10 @@ defmodule BitcoinCoreClient.Business do
       ...> |> BitcoinCoreClient.Business.get_block_by_hash()
       %Block{...}
   """
-  @spec get_block_by_hash(binary(), %Rpc.Settings{}) :: {:ok, %Block{}} | {:error, binary}
+  @spec get_block_by_hash(binary(), %Rpc.Settings{}) :: {:ok, bitstring()} | {:error, binary}
   def get_block_by_hash(block_hash, settings) do
     Rpc.call(settings, "getblock", [block_hash, 0])
     |> Binary.from_hex()
-    |> Block.decode()
   end
 
   @doc """
@@ -41,7 +39,7 @@ defmodule BitcoinCoreClient.Business do
       ...> |> BitcoinCoreClient.Business.get_block_by_height()
       %Block{...}
   """
-  @spec get_block_by_height(integer(), %Rpc.Settings{}) :: {:ok, %Block{}} | {:error, binary}
+  @spec get_block_by_height(integer(), %Rpc.Settings{}) :: {:ok, bitstring()} | {:error, binary}
   def get_block_by_height(height, settings) do
     height
     |> get_block_hash(settings)
