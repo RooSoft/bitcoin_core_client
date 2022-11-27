@@ -57,5 +57,6 @@ defmodule BitcoinCoreClient.Business do
   @spec get_transaction(binary(), %Rpc.Settings{}) :: {:ok, bitstring()} | {:error, binary}
   def get_transaction(id, settings) do
     Rpc.call(settings, "getrawtransaction", [id])
+    |> Binary.from_hex()
   end
 end
