@@ -23,4 +23,8 @@ defmodule BitcoinCoreClient do
   def get_block_by_height(height) do
     GenServer.call(@server, {:get_block_by_height, height})
   end
+
+  def get_transaction(id) do
+    GenServer.call(@server, {:get_transaction, id})
+  end
 end

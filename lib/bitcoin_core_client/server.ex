@@ -36,4 +36,11 @@ defmodule BitcoinCoreClient.Server do
 
     {:reply, block, settings}
   end
+
+  @impl true
+  def handle_call({:get_transaction, id}, _from, settings) do
+    transaction = Business.get_transaction(id, settings)
+
+    {:reply, transaction, settings}
+  end
 end

@@ -45,4 +45,17 @@ defmodule BitcoinCoreClient.Business do
     |> get_block_hash(settings)
     |> get_block_by_hash(settings)
   end
+
+  @doc """
+  Returns a transaction
+
+  ## Examples
+      iex> "50cfd3361f7162b3c0c00dacd3d0e4ddf61e8ec0c51bfa54c4ca0e61876810a9"
+      ...> |> BitcoinCoreClient.Business.get_transaction()
+      <<x::bitstring>>
+  """
+  @spec get_transaction(binary(), %Rpc.Settings{}) :: {:ok, bitstring()} | {:error, binary}
+  def get_transaction(id, settings) do
+    Rpc.call(settings, "getrawtransaction", [id])
+  end
 end
