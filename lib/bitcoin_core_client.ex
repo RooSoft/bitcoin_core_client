@@ -4,6 +4,8 @@ defmodule BitcoinCoreClient do
   """
 
   @callback get_block_hash(integer()) :: binary()
+  @callback get_transaction(binary()) :: binary()
+
   @server BitcoinCoreClient.Server
 
   alias BitcoinCoreClient.Rpc
