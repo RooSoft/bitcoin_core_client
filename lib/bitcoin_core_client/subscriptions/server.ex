@@ -59,7 +59,9 @@ defmodule BitcoinCoreClient.Subscriptions.Server do
   defp add_block_subscription(subscriptions, pid, ref) do
     %Subscriptions{blocks: block_subscriptions} = subscriptions
 
-    block_subscriptions = [{pid, ref} | block_subscriptions]
+    block_subscriptions =
+      [{pid, ref} | block_subscriptions]
+      |> Enum.uniq()
 
     %{subscriptions | blocks: block_subscriptions}
   end
